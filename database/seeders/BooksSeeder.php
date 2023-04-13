@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Generator as Faker;
 
 class BooksSeeder extends Seeder
 {
@@ -12,8 +14,21 @@ class BooksSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        //
+
+        for ($i = 0; $i < 100; $i++) {
+
+            $book = new Book();
+
+            $book->isbn_code = $faker->bothify('###-##-#####-##-#');
+            $book->title = $faker->sentence(5);
+            $book->main_author = $faker->name();
+            $book->pages = $faker->randomNumber(3, true);
+            $book->isAvailable = $faker->boolean();
+            $book->copies = $faker->randomNumber(2, true);
+
+            $book->save();
+        }
     }
 }
