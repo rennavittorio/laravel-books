@@ -63,7 +63,7 @@
 
 
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Save new book</button>
+            <button type="submit" class="btn btn-primary">Update book</button>
         </div>
     </form>
 
