@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -28,7 +31,9 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+
+        $genres = Genre::orderBy('name', 'asc')->get();
+        return view('books.create', compact('genres'));
     }
 
     /**
@@ -37,22 +42,19 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
         // dd($request);
 
-        $data = $request->validate([
-            'isbn_code' => 'required|string',
-            'title' => 'required|string|min:3|max:100',
-            'main_author' => 'required|string|min:3|max:100',
-            'pages' => 'nullable|numeric',
-            'isAvailable' => 'required|boolean',
-            'copies' => 'required|numeric'
-        ]);
+        $data = $request->validated();
 
         $new_b = new Book();
         $new_b->fill($data);
         $new_b->slug = Str::of($data['title'])->slug();
+
+        if (!isset($data['isAvailable'])) {
+            $new_b->isAvailable = 0;
+        };
 
         $new_b->save();
 
@@ -78,7 +80,9 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        return view('books.edit', compact('book'));
+
+        $genres = Genre::orderBy('name', 'asc')->get();
+        return view('books.edit', compact('book', 'genres'));
     }
 
     /**
@@ -88,18 +92,12 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
         // dd($request);
 
-        $data = $request->validate([
-            'isbn_code' => 'required|string',
-            'title' => 'required|string|min:3|max:100',
-            'main_author' => 'required|string|min:3|max:100',
-            'pages' => 'nullable|numeric',
-            'isAvailable' => 'required|boolean',
-            'copies' => 'required|numeric'
-        ]);
+        $data = $request->validated();
+        $data['slug'] = Str::of($data['title'])->slug();
 
         $book->update($data);
         return to_route('books.show', $book->slug);
@@ -125,10 +123,12 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         if ($book->trashed()) {
-            $book->forceDelete();
+            $book->forceDelete(); //hard
         }
 
-        $book->delete();
+        $book->delete(); //soft
+
+
 
         return to_route('books.index');
     }

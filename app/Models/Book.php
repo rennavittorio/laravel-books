@@ -19,6 +19,12 @@ class Book extends Model
         'main_author',
         'pages',
         'isAvailable',
-        'copies'
+        'copies',
+        'genre_id'
     ];
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
+    }
 }

@@ -15,6 +15,7 @@
             <h6 class="card-subtitle mb-2 text-body-secondary"> {{ $book['pages'] }}</h6>
             <h6 class="card-subtitle mb-2 text-body-secondary"> {{ $book['isAvailable'] }}</h6>
             <h6 class="card-subtitle mb-2 text-body-secondary"> {{ $book['copies'] }}</h6>
+            <h6 class="card-subtitle mb-2 text-body-secondary"> {{ $book['genre']['name'] }}</h6>
             <div class="div">
                 <a href="{{ route('books.edit', $book) }}" class="btn btn-warning">Edit</a>
                 <a href="{{ route('books.index') }}" class="btn btn-primary">Back to book list</a>

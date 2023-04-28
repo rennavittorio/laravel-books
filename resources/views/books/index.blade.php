@@ -24,6 +24,7 @@
                 <th scope="col">pages</th>
                 <th scope="col">is available</th>
                 <th scope="col">copies</th>
+                <th scope="col">genre</th>
                 <th scope="col">created</th>
                 <th scope="col">deleted</th>
                 <th scope="col">actions</th>
@@ -42,6 +43,7 @@
                 <td>{{ $book->pages }}</td>
                 <td>{{ $book->isAvailable }}</td>
                 <td>{{ $book->copies }}</td>
+                <td> {{ $book->genre->name }} </td>
                 <td>{{ $book->created_at->format('Y-m-d') }}</td>
                 <td>{{ $book->trashed() ? $book->deleted_at->format('Y-m-d') : '' }}</td>
                 <td>

@@ -65,6 +65,20 @@
             <div class="text-danger">{{ $message }}</div>
         @enderror
 
+        <div class="col-12">
+            <div class="form-floating">
+                <select class="form-select" id="genre_id" aria-label="Floating label select example"
+                name="genre_id"
+                >
+                    @foreach ($genres as $genre)
+                        <option 
+                        @selected(old('genre_id', $book->genre_id) == $genre->id)
+                        value="{{ $genre->id }}">{{ $genre->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Update book</button>

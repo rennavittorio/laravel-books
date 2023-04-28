@@ -44,7 +44,7 @@
         @enderror
 
         <div class="col-12">
-            <input type="hidden" class="form-check-input" id="isAvailable" name="isAvailable" value="0">
+            {{-- <input type="hidden" class="form-check-input" id="isAvailable" name="isAvailable" value="0"> --}}
             <input type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable" value="1">
             {{-- ATTENZIONE: serve doppio check qui --}}
             <label for="isAvailable" class="form-label">isAvailable</label>
@@ -61,10 +61,26 @@
             <div class="text-danger">{{ $message }}</div>
         @enderror
 
+        <div class="col-12">
+            <div class="form-floating">
+                <select class="form-select" id="genre_id" aria-label="Floating label select example"
+                name="genre_id"
+                >
+                    @foreach ($genres as $genre)
+                        <option 
+                        @selected(old('genre_id') == $genre->id)
+                        value="{{ $genre->id }}">{{ $genre->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Save new book</button>
         </div>
+
+        
     </form>
 
     @if ($errors->any())
