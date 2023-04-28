@@ -21,4 +21,6 @@ Route::get('/', function () {
 
 Route::resource('books', BookController::class)->parameters([
     'books' => 'book:slug'
-]);
+])->withTrashed(['index', 'show', 'destroy']);
+
+Route::post('/books/{book:slug}/restore', [BookController::class, 'restore'])->name('books.restore')->withTrashed();

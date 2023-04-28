@@ -43,11 +43,23 @@
                 <td>{{ $book->isAvailable }}</td>
                 <td>{{ $book->copies }}</td>
                 <td>{{ $book->created_at->format('Y-m-d') }}</td>
-                <td>{{ $book->trashed() ? $book->delete_at->format('Y-m-d') : '' }}</td>
+                <td>{{ $book->trashed() ? $book->deleted_at->format('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ route('books.edit', $book) }}" class="btn btn-secondary btn-sm">edit</a>
-                    <a href="" class="btn btn-secondary btn-sm">delete</a>
-                    <a href="" class="btn btn-secondary btn-sm">restore</a>
+                    <div class="wrapper d-flex gap-1">
+
+                        <a href="{{ route('books.edit', $book) }}" class="btn btn-warning btn-sm">edit</a>
+                        <form action="{{ route('books.destroy', $book->slug) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" class="btn btn-danger btn-sm" value="delete">
+                        </form>
+    
+                        <form action="{{ route('books.restore', $book->slug) }}" method="POST">
+                            @csrf
+                            <input type="submit" class="btn btn-success btn-sm" value="restore">
+                        </form>
+
+                    </div>
                 </td>
             </tr>
                 

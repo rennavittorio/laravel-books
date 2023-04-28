@@ -46,7 +46,11 @@
         @enderror
 
         <div class="col-12">
-            <input @checked(old('isAvailable', $book->isAvailable)) type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable">
+            <input type="hidden" class="form-check-input" id="isAvailable" name="isAvailable" value="0">
+            <input 
+            @checked(old('isAvailable', $book->isAvailable) == 1)
+            type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable" value="1">
+            {{-- ATTENZIONE: serve doppio check qui --}}
             <label for="isAvailable" class="form-label">isAvailable</label>
         </div>
         @error('isAvailable')

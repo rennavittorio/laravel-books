@@ -44,7 +44,9 @@
         @enderror
 
         <div class="col-12">
-            <input type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable">
+            <input type="hidden" class="form-check-input" id="isAvailable" name="isAvailable" value="0">
+            <input type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable" value="1">
+            {{-- ATTENZIONE: serve doppio check qui --}}
             <label for="isAvailable" class="form-label">isAvailable</label>
         </div>
         @error('isAvailable')

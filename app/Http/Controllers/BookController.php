@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -15,7 +16,7 @@ class BookController extends Controller
     public function index()
     {
 
-        $books = Book::all();
+        $books = Book::withTrashed()->get();
 
         return view('books.index', compact('books'));
     }
@@ -38,7 +39,24 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
+
+        $data = $request->validate([
+            'isbn_code' => 'required|string',
+            'title' => 'required|string|min:3|max:100',
+            'main_author' => 'required|string|min:3|max:100',
+            'pages' => 'nullable|numeric',
+            'isAvailable' => 'required|boolean',
+            'copies' => 'required|numeric'
+        ]);
+
+        $new_b = new Book();
+        $new_b->fill($data);
+        $new_b->slug = Str::of($data['title'])->slug();
+
+        $new_b->save();
+
+        return to_route('books.show', $new_b->slug);
     }
 
     /**
@@ -72,7 +90,30 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        dd($request);
+        // dd($request);
+
+        $data = $request->validate([
+            'isbn_code' => 'required|string',
+            'title' => 'required|string|min:3|max:100',
+            'main_author' => 'required|string|min:3|max:100',
+            'pages' => 'nullable|numeric',
+            'isAvailable' => 'required|boolean',
+            'copies' => 'required|numeric'
+        ]);
+
+        $book->update($data);
+        return to_route('books.show', $book->slug);
+    }
+
+
+    public function restore(Book $book, Request $request)
+    {
+        if ($book->trashed()) {
+            $book->restore();
+            $request->session()->flash('message', 'il libro è stato ripristinato nel db');
+        };
+
+        return to_route('books.index');
     }
 
     /**
@@ -83,6 +124,12 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        if ($book->trashed()) {
+            $book->forceDelete();
+        }
+
+        $book->delete();
+
+        return to_route('books.index');
     }
 }
