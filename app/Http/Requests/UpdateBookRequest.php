@@ -30,11 +30,11 @@ class UpdateBookRequest extends FormRequest
                 'required', 'string', 'min:3', 'max:100',
                 Rule::unique('books', 'title')->ignore($this->book)
             ],
-            'main_author' => 'required|string|min:3|max:100',
             'pages' => 'nullable|numeric',
             'isAvailable' => 'boolean',
             'copies' => 'required|numeric',
-            'genre_id' => 'exists:genres,id'
+            'genre_id' => 'exists:genres,id',
+            'authors' => 'required|exists:authors,id'
         ];
     }
 }

@@ -20,7 +20,7 @@
                 <th scope="col">id</th>
                 <th scope="col">isbn_code</th>
                 <th scope="col">title</th>
-                <th scope="col">main author</th>
+                <th scope="col">authors</th>
                 <th scope="col">pages</th>
                 <th scope="col">is available</th>
                 <th scope="col">copies</th>
@@ -39,7 +39,13 @@
                 <td>{{ $book->id }}</td>
                 <td>{{ $book->isbn_code }}</td>
                 <td><a href="{{ route('books.show', $book) }}">{{ $book->title }}</a></td>
-                <td>{{ $book->main_author }}</td>
+                <td>
+                    @foreach($book->authors as $author)
+                        <span class="badge bg-warning">
+                            {{ $author->first_name }}
+                        </span>
+                    @endforeach
+                </td>
                 <td>{{ $book->pages }}</td>
                 <td>{{ $book->isAvailable }}</td>
                 <td>{{ $book->copies }}</td>

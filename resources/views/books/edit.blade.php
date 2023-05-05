@@ -29,13 +29,33 @@
             <div class="text-danger">{{ $message }}</div>
         @enderror
 
-        <div class="col-12">
-            <label for="main_author" class="form-label">main_author</label>
-            <input type="text" class="form-control" id="main_author" name="main_author" value="{{ old('main_author', $book->main_author)}}">
+        <div class="mb-3">
+            <label for="authors" class="form-label">authors</label>
+            <div class="d-flex @error('authors') is-invalid @enderror flex-wrap gap-5">
+            
+                @foreach($authors as $author)
+                    <div class="form-check">
+                        <input 
+                        name="authors[]" 
+                        @checked(in_array($author->id, old('authors',[]))) 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        value="{{ $author->id }}" 
+                        id="flexCheckDefault"
+                        >
+                        <label class="form-check-label" for="flexCheckDefault">
+                            {{ $author->first_name }}, {{ $author->last_name }}
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+
+            @error('authors')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
         </div>
-        @error('main_author')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
 
         <div class="col-12">
             <label for="pages" class="form-label">pages</label>

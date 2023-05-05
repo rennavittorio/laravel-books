@@ -16,7 +16,6 @@ class Book extends Model
         'isbn_code',
         'title',
         'slug',
-        'main_author',
         'pages',
         'isAvailable',
         'copies',
@@ -26,5 +25,10 @@ class Book extends Model
     public function genre()
     {
         return $this->belongsTo(Genre::class);
+    }
+
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class);
     }
 }

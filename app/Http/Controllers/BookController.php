@@ -6,6 +6,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Models\Genre;
+use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -33,7 +34,8 @@ class BookController extends Controller
     {
 
         $genres = Genre::orderBy('name', 'asc')->get();
-        return view('books.create', compact('genres'));
+        $authors = Author::orderBy('first_name', 'asc')->get();
+        return view('books.create', compact('genres', 'authors'));
     }
 
     /**
@@ -57,6 +59,8 @@ class BookController extends Controller
         };
 
         $new_b->save();
+
+        $new_b->authors()->attach($data['authors']);
 
         return to_route('books.show', $new_b->slug);
     }
@@ -82,7 +86,8 @@ class BookController extends Controller
     {
 
         $genres = Genre::orderBy('name', 'asc')->get();
-        return view('books.edit', compact('book', 'genres'));
+        $authors = Author::orderBy('first_name', 'asc')->get();
+        return view('books.edit', compact('book', 'genres', 'authors'));
     }
 
     /**
@@ -94,12 +99,21 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
+
+
         // dd($request);
 
         $data = $request->validated();
         $data['slug'] = Str::of($data['title'])->slug();
 
         $book->update($data);
+
+        if (isset($data['authors'])) {
+            $book->authors()->sync($data['authors']);
+        } else {
+            $book->authors()->sync([]);
+        }
+
         return to_route('books.show', $book->slug);
     }
 
